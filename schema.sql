@@ -13,8 +13,9 @@ CREATE TABLE role (
     id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR (30),
     salary DECIMAL (10,2) NOT NULL,
-    department_id INT,
-    PRIMARY KEY (id)   
+    department_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (department_id) REFERENCES department(id)   
 );
 
 CREATE TABLE employee (
@@ -23,8 +24,15 @@ CREATE TABLE employee (
     last_name VARCHAR (30) NOT NULL,
     role_id INT NOT NULL,
     manager_id INT,
-    PRIMARY KEY (id)  
-)
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES role(id),
+    FOREIGN KEY (manager_id) REFERENCES employee(id)  
+);
 
 INSERT INTO department(name)
-Values ('Sales') 
+Values ('Sales'), ('Marketing'),('Engineering'),('Human Resources');
+
+INSERT INTO role(title, salary, department_id) Values ('Sales Associate',40000,1),('Research and Development',50000,2),('Engineer',60000,3),('HR',30000,4),('Sales Manager',75000,1),('Marketing Manager',75000,2),('Engineering Manager',75000,3),('Human Resources Manager',75000,4);
+
+INSERT INTO employee(first_name,last_name,role_id,manager_id) Values ('Spider','Man',5,NULL),('Iron','Man',1,1),('Black','Panther',6,NULL),('Dead','Pool',2,3),('Captain','America',7,NULL),('Jessica','Jones',3,5),('Ant','Man',8,NULL),('Captain','Marvel',4,7);
+
