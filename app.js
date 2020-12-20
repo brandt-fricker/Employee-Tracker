@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-
+const cTable = require("console.table");
 // creating connection to mysql db
 var connection = mysql.createConnection({
   host: "localhost",
@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-  console.log("connected as id " + connection.threadId + "\n");
+  console.log("connected as id " + connection.threadId);
   start();
 });
 
@@ -42,10 +42,10 @@ function start() {
         case "View all departments":
           viewAllDepartments();
           break;
-          
-          case "Update employee role":
-            updateEmployeeRole();
-            break;
+
+        case "Update employee role":
+          updateEmployeeRole();
+          break;
         case "Add an employee":
           addEmployee();
           break;
@@ -57,7 +57,6 @@ function start() {
         case "Add a role":
           addRole();
           break;
-
 
         default:
           connection.end();
@@ -87,29 +86,34 @@ function viewAllDepartments() {
     }
   });
 }
-function updateEmployeeRole(){
-    inquirer.prompt([
-        {
-            type: 'number',
-            message: 'Select employee by ID number that you wish to update',
-            name: 'employeeId'
-        },
-        {
-            type: 'number',
-            message: 'Enter a new role ID for employee',
-            name: 'roleId'
+function updateEmployeeRole() {
+  inquirer
+    .prompt([
+      {
+        type: "number",
+        message: "Select employee by ID number that you wish to update",
+        name: "employeeId",
+      },
+      {
+        type: "number",
+        message: "Enter a new role ID for employee",
+        name: "roleId",
+      },
+    ])
+    .then(function (res) {
+      connection.query(
+        "UPDATE employee SET role_id = ? WHERE id = ?",
+        [res.roleId, res.employeeId],
+        function (err, data) {
+          if (err) {
+            console.log("ERROR UPDATING EMPLOYEE ROLE: " + err);
+          } else {
+            console.log("Updated Employee Role");
+          }
+          start();
         }
-    ]).then(function(res){
-        connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [res.roleId,res.employeeId], function(err,data){
-            if (err){
-                console.log('ERROR UPDATING EMPLOYEE ROLE: '+err)
-            }else{
-                console.log('Updated Employee Role')
-            }
-            start()
-        });
-    })
-
+      );
+    });
 }
 
 function addEmployee() {
@@ -117,12 +121,12 @@ function addEmployee() {
     .prompt([
       {
         type: "input",
-        message: "What is the first name of the employee?",
+        message: "What is the first name of the employee you're adding?",
         name: "firstName",
       },
       {
         type: "input",
-        message: "What is the last name of the employee?",
+        message: "What is the last name of the employee you're adding?",
         name: "lastName",
       },
       {
@@ -169,7 +173,7 @@ function addDepartment() {
           if (err) {
             console.log("ERROR ADDING DEPARTMENT: " + err);
           } else {
-            console.log('Added New Department')
+            console.log("Added New Department");
             start();
           }
         }
@@ -178,33 +182,36 @@ function addDepartment() {
 }
 
 function addRole() {
-  inquirer.prompt([
+  inquirer
+    .prompt([
       {
-          type: 'input',
-          message: 'Enter title for new role:',
-          name: 'newRole'
-
+        type: "input",
+        message: "Enter title for new role:",
+        name: "newRole",
       },
       {
-        type: 'number',
-        message: 'Enter salary for new role:',
-        name: 'newSalary'
-
-    },
-    {
-        type: 'number',
-        message: 'Enter department ID for new role:',
-        name: 'newDeptID'
-
-    },
-    ]).then(function(res){
-        connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)', [res.title, res.salary, res.department_id],function(err,data){
-            if (err){
-                console.log('ERROR ADDING ROLE: '+err)
-            }else{
-                console.log('Added New Role')
-            };
-        });
-        start();
+        type: "number",
+        message: "Enter salary for new role:",
+        name: "newSalary",
+      },
+      {
+        type: "number",
+        message: "Enter department ID for new role:",
+        name: "newDeptID",
+      },
+    ])
+    .then(function (res) {
+      connection.query(
+        "INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)",
+        [res.title, res.salary, res.department_id],
+        function (err, data) {
+          if (err) {
+            console.log("ERROR ADDING ROLE: " + err);
+          } else {
+            console.log("Added New Role");
+          }
+        }
+      );
+      start();
     });
 }
