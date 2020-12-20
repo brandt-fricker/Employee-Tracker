@@ -205,7 +205,7 @@ function addRole() {
       {
         type: "input",
         message: "Enter title for new role:",
-        name: "newRole",
+        name: "newRoleTitle",
       },
       {
         type: "number",
@@ -221,7 +221,7 @@ function addRole() {
     .then(function (res) {
       connection.query(
         "INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)",
-        [res.title, res.salary, res.department_id],
+        [res.newRoleTitle, res.newSalary, res.newDeptID],
         function (err, data) {
           if (err) {
             console.log("ERROR ADDING ROLE: " + err);
