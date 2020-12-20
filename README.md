@@ -4,7 +4,17 @@
 The Employee Tracker is a great resource for any user in a mangement position to view, add and update their departments, employees, and employee roles.  This application makes changing and keeping up to date information on their employees and departments a breeze. 
 
 ### Employee Tracker in Action!
-![Running App]()
+![EmployeeTracker](readmeGif/EmployeeTracker.gif)
+
+
+## Table of Contents
+
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Repository](#repository)
+  - [GitHub](#github)
+
 
 ## Installation
 
@@ -27,3 +37,9 @@ The application will be invoked when a user runs the following:
 node app.js
 </code>
 </pre>
+
+## Repository 
+- [Project Repository](https://github.com/brandt-fricker/Employee-Tracker)
+
+## GitHub
+- [GitHub Profile](https://github.com/brandt-fricker)

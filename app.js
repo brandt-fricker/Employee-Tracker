@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
   database: "employees_db",
 });
 
-figlet("The Employee Tracker", function (err, res) {
+figlet("Employee Tracker", function (err, res) {
   console.log(err || res);
 });
 
