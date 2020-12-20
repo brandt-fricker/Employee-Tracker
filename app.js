@@ -24,10 +24,10 @@ function start() {
       choices: [
         "View all employees",
         "View all departments",
+        "Update employee role",
         "Add an employee",
         "Add a department",
         "Add a role",
-        "Update employee role",
         "QUIT",
       ],
       name: "choice",
@@ -36,13 +36,16 @@ function start() {
       console.log(answers.choice);
       switch (answers.choice) {
         case "View all employees":
-          viewEmployees();
+          viewAllEmployees();
           break;
 
         case "View all departments":
-          viewDepartments();
+          viewAllDepartments();
           break;
-
+          
+          case "Update employee role":
+            updateEmployeeRole();
+            break;
         case "Add an employee":
           addEmployee();
           break;
@@ -55,9 +58,6 @@ function start() {
           addRole();
           break;
 
-        case "Update employee role":
-          updateEmployeeRole();
-          break;
 
         default:
           connection.end();
@@ -66,7 +66,7 @@ function start() {
     });
 }
 
-function viewEmployees() {
+function viewAllEmployees() {
   connection.query("SELECT * FROM employee", function (err, data) {
     if (err) {
       console.log("YOU HAVE AN ERROR VIEWING ALL EMPLOYEES: " + err);
@@ -77,7 +77,7 @@ function viewEmployees() {
   });
 }
 
-function viewDepartments() {
+function viewAllDepartments() {
   connection.query("SELECT * FROM departments", function (err, data) {
     if (err) {
       console.log("YOU HAVE AN ERROR VIEWING ALL DEPARTMENTS: " + err);
@@ -86,6 +86,30 @@ function viewDepartments() {
       start();
     }
   });
+}
+function updateEmployeeRole(){
+    inquirer.prompt([
+        {
+            type: 'number',
+            message: 'Select employee by ID number that you wish to update',
+            name: 'employeeId'
+        },
+        {
+            type: 'number',
+            message: 'Enter a new role ID for employee',
+            name: 'roleId'
+        }
+    ]).then(function(res){
+        connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [res.roleId,res.employeeId], function(err,data){
+            if (err){
+                console.log('ERROR UPDATING EMPLOYEE ROLE: '+err)
+            }else{
+                console.log('Updated Employee Role')
+            }
+            start()
+        });
+    })
+
 }
 
 function addEmployee() {
@@ -145,7 +169,7 @@ function addDepartment() {
           if (err) {
             console.log("ERROR ADDING DEPARTMENT: " + err);
           } else {
-            console.table("Added Department");
+            console.log('Added New Department')
             start();
           }
         }
@@ -162,10 +186,25 @@ function addRole() {
 
       },
       {
-        type: 'input',
-        message: 'Enter title for new role:',
-        name: 'newRole'
+        type: 'number',
+        message: 'Enter salary for new role:',
+        name: 'newSalary'
 
     },
-    ]);
+    {
+        type: 'number',
+        message: 'Enter department ID for new role:',
+        name: 'newDeptID'
+
+    },
+    ]).then(function(res){
+        connection.query('INSERT INTO roles (title, salary, department_id) VALUES (?,?,?)', [res.title, res.salary, res.department_id],function(err,data){
+            if (err){
+                console.log('ERROR ADDING ROLE: '+err)
+            }else{
+                console.log('Added New Role')
+            };
+        });
+        start();
+    });
 }
