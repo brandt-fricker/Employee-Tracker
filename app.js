@@ -116,9 +116,26 @@ function addEmployee(){
         connection.query('INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)',
         [res.firstName, res.lastName, res.roleId, res.managerId], function(err,data){
             if (err){
-                console.log('YOU HAVE AN ERROR ADDING AN EMPLOYEE: '+err)
+                console.log('ERROR ADDING AN EMPLOYEE: '+err)
             }else{
                 console.table('Added Employee');
+                start();
+            }
+        })
+    })
+}
+
+function addDepartment() {
+    inquirer.prompt([{
+        type: "input",
+        name: "department",
+        message: "What department do you want to add?"
+    }, ]).then(function(res) {
+        connection.query('INSERT INTO departments (name) VALUES (?)', [res.department], function(err, data) {
+            if (err){
+                console.log("ERROR ADDING DEPARTMENT: " +err);
+            }else{
+                console.table("Added Department");
                 start();
             }
         })
