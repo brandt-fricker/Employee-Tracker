@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
+const figlet = require("figlet");
 // creating connection to mysql db
 var connection = mysql.createConnection({
   host: "localhost",
@@ -8,6 +9,10 @@ var connection = mysql.createConnection({
   user: "root",
   password: "",
   database: "employees_db",
+});
+
+figlet("The Employee Tracker", function (err, res) {
+  console.log(err || res);
 });
 
 connection.connect(function (err) {
@@ -58,9 +63,16 @@ function start() {
           addRole();
           break;
 
-        default:
+        case "QUIT":
+          figlet("Have A Good Day", function (err, res) {
+            console.log(err || res);
+          });
           connection.end();
           break;
+
+        // default:
+        //   connection.end();
+        //   break;
       }
     });
 }
@@ -70,6 +82,9 @@ function viewAllEmployees() {
     if (err) {
       console.log("YOU HAVE AN ERROR VIEWING ALL EMPLOYEES: " + err);
     } else {
+      figlet("Employees", function (err, res) {
+        console.log(err || res);
+      });
       console.table(data);
       start();
     }
@@ -81,6 +96,9 @@ function viewAllDepartments() {
     if (err) {
       console.log("YOU HAVE AN ERROR VIEWING ALL DEPARTMENTS: " + err);
     } else {
+      figlet("Departments", function (err, res) {
+        console.log(err || res);
+      });
       console.table(data);
       start();
     }
